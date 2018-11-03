@@ -18,7 +18,7 @@ export default {
 
 <style>
 #app {}
-.views {
-  padding-top: 180px;
+.views > :not(#home) {
+  padding-top: 200px;
 }
 </style>

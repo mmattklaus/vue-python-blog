@@ -3,6 +3,7 @@ import Router from 'vue-router'
 import Home from './views/Home.vue'
 import Blog from './views/Blog.vue'
 import Login from './views/auth/Login.vue'
+import Composer from './views/Composer.vue'
 
 Vue.use(Router)
 
@@ -17,6 +18,11 @@ export default new Router({
     path: '/blog',
     name: 'blog',
     component: Blog
+  },
+  {
+    path: '/compose',
+    name: 'compose',
+    component: Composer
   },
   {
     path: '/login',
