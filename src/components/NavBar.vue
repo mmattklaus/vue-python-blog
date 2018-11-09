@@ -55,7 +55,7 @@
             <div class="navbar-end">
                 <div class="navbar-item">
                     <div class="buttons">
-                        <router-link to="/login" class="button is-primary">
+                        <router-link to="/register" class="button is-primary">
                             <strong>Sign up</strong>
                         </router-link>
                         <router-link to="/login" class="button is-light">
@@ -69,7 +69,15 @@
 </template>
 <script>
     export default {
-        name: 'nav-bar'
+        name: 'nav-bar',
+        mounted () {
+            $(document).ready(function() {
+                $(".navbar-burger").click(function() {
+                    $(".navbar-burger").toggleClass("is-active");
+                    $(".navbar-menu").toggleClass("is-active");
+                });
+            });
+        }
     }
 </script>
 <style scoped>

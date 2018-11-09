@@ -39,9 +39,8 @@
 						</div>
 					</div>
 					<footer class="card-footer">
-						<a href="#" class="card-footer-item">Don't have an account</i></a>
-						<a href="#/login" class="card-footer-item"></a>
-						<a href="#" class="card-footer-item">Forgot Password</a>
+						<router-link to="/register" class="card-footer-item">Don't have an account</router-link>
+						<router-link to="/forgot-password" class="card-footer-item">Forgot Password</router-link>
 					</footer>
 				</div>
 			</div>

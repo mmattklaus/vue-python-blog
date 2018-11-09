@@ -21,4 +21,7 @@ export default {
 .views > :not(#home) {
   padding-top: 200px;
 }
+  body {
+    overflow-x: hidden;
+  }
 </style>

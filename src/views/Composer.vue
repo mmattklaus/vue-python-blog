@@ -1,369 +1,485 @@
 <template>
     <div id="composer">
-        <div id="mail-app" class="columns">
-            <aside class="column is-2 aside hero is-fullheight">
-                <div>
-                    <div class="compose has-text-centered"><a class="button is-danger is-block is-bold"><span
-                            class="compose">Compose</span></a></div>
-                    <div class="main">
-                        <a href="#" class="item active"><span class="icon"><i
-                            class="fa fa-inbox"></i></span><span class="name">Inbox</span></a>
-                        <a href="#" class="item"><span
-                            class="icon"><i class="fa fa-star"></i></span><span class="name">Starred</span></a>
-                        <a href="#" class="item"><span class="icon"><i class="fa fa-envelope-o"></i></span><span
-                            class="name">Sent Mail</span></a>
+        <div class="">
+            <!-- START ARTICLE FEED -->
+            <section class="columns">
+                <div class="column is-8 is-offset-2">
+                    <div class="tabs is-centered">
+                        <ul>
+                            <li class="is-active">
+                                <a>
+                                    <span class="icon is-small"><i class="fas fa-pen" aria-hidden="true"></i></span>
+                                    <span>Composer</span>
+                                </a>
+                            </li>
+                            <li>
+                                <a>
+                                    <span class="icon is-small"><i class="fas fa-book" aria-hidden="true"></i></span>
+                                    <span>Draft</span>
+                                </a>
+                            </li>
+                            <li>
+                                <a>
+                                    <span class="icon is-small">
+                                        <i class="far fa-file" aria-hidden="true"></i></span>
+                                    <span>Articles</span>
+                                </a>
+                            </li>
+                            <li>
+                                <a>
+                                    <span class="icon is-small"><i class="far fa-lightbulb"
+                                                                   aria-hidden="true"></i></span>
+                                    <span>Published</span>
+                                </a>
+                            </li>
+                        </ul>
+                    </div>
+                    <div class="editor__parent">
+                        <editor class="editor" :extensions="extensions">
+
+                            <div class="menubar" slot="menubar" slot-scope="{ nodes, marks }">
+                                <div v-if="nodes && marks">
+
+                                    <button class="menubar__button"
+                                            :class="{ 'is-active': marks.bold.active() }"
+                                            @click="marks.bold.command">
+                                        <icon name="bold"/>
+                                    </button>
+
+                                    <button class="menubar__button"
+                                            :class="{ 'is-active': marks.italic.active() }"
+                                            @click="marks.italic.command">
+                                        <icon name="italic"/>
+                                    </button>
+
+                                    <button class="menubar__button"
+                                            :class="{ 'is-active': nodes.paragraph.active({ textAlign: 'left' }) }"
+                                            @click="nodes.paragraph.command({ textAlign: 'left' })">
+                                        <icon name="align-left"/>
+                                    </button>
+
+                                    <button class="menubar__button"
+                                            :class="{ 'is-active': nodes.paragraph.active({ textAlign: 'center' }) }"
+                                            @click="nodes.paragraph.command({ textAlign: 'center' })">
+                                        <icon name="align-center"/>
+                                    </button>
+
+                                    <button class="menubar__button"
+                                            :class="{ 'is-active': nodes.paragraph.active({ textAlign: 'right' }) }"
+                                            @click="nodes.paragraph.command({ textAlign: 'right' })">
+                                        <icon name="align-right"/>
+                                    </button>
+                                    <button class="menubar__button"
+                                            :class="{ 'is-active': marks.strike.active() }"
+                                            @click="marks.strike.command">
+                                        <icon name="strikethrough"/>
+                                    </button>
+
+                                    <button class="menubar__button"
+                                            :class="{ 'is-active': marks.underline.active() }"
+                                            @click="marks.underline.command">
+                                        <icon name="underline"/>
+                                    </button>
+
+                                    <button class="menubar__button"
+                                            @click="marks.code.command"
+                                            :class="{ 'is-active': marks.code.active() }">
+                                        <icon name="code"/>
+                                    </button>
+
+                                    <button class="menubar__button"
+                                            :class="{ 'is-active': nodes.paragraph.active() }"
+                                            @click="nodes.paragraph.command">
+                                        <icon name="paragraph"/>
+                                    </button>
+
+                                    <button class="menubar__button"
+                                            :class="{ 'is-active': nodes.heading.active({ level: 1 }) }"
+                                            @click="nodes.heading.command({ level: 1 })">
+                                        <heading1/>
+                                    </button>
+
+                                    <button class="menubar__button"
+                                            :class="{ 'is-active': nodes.heading.active({ level: 2 }) }"
+                                            @click="nodes.heading.command({ level: 2 })">
+                                        <heading2/>
+                                    </button>
+
+                                    <button class="menubar__button"
+                                            :class="{ 'is-active': nodes.heading.active({ level: 3 }) }"
+                                            @click="nodes.heading.command({ level: 3 })">
+                                        <heading3/>
+                                    </button>
+
+                                    <button class="menubar__button"
+                                            :class="{ 'is-active': nodes.bullet_list.active() }"
+                                            @click="nodes.bullet_list.command">
+                                        <list-bullets/>
+                                    </button>
+
+                                    <button class="menubar__button"
+                                            :class="{ 'is-active': nodes.ordered_list.active() }"
+                                            @click="nodes.ordered_list.command">
+                                        <list-numbers/>
+                                    </button>
+
+                                    <button class="menubar__button"
+                                            :class="{ 'is-active': nodes.blockquote.active() }"
+                                            @click="nodes.blockquote.command">
+                                        <format-quote-open-icon/>
+                                    </button>
+
+                                    <button class="menubar__button"
+                                            :class="{ 'is-active': nodes.code_block.active() }"
+                                            @click="nodes.code_block.command">
+                                        <icon name="code"/>
+                                    </button>
+                                    <button class="menubar__button link"
+                                            @click="addLink(marks.link)"
+                                            :class="{ 'is-active': marks.link.active() }">
+                                        <icon name="link"/>
+                                    </button>
+
+                                    <button class="menubar__button embed" disabled
+                                            @click="addLink(marks.link)"
+                                            :class="{ 'is-active': marks.link.active() }">
+                                        <youtube-icon/>
+                                    </button>
+
+                                    <button class="menubar__button" disabled
+                                            :class="{ 'is-active': nodes.todo_list.active() }"
+                                            @click="nodes.todo_list.command">
+                                        <format-list-checkbox-icon/>
+                                    </button>
+
+                                    <button class="menubar__button" @click.prevent="addImage(nodes, marks)">
+                                        <icon name="image"/>
+                                    </button>
+                                    <input type="file" class="editor__image-btn" style="display: none;">
+                                </div>
+                            </div>
+
+                            <div class="editor__content" slot="content" slot-scope="props">
+                                <h2>
+                                    Hi there,
+                                </h2>
+                                <pre><code v-html="CSSExample"></code></pre>
+                                <p>
+                                    Note: tiptap doesn't import syntax highlighting language definitions from
+                                    highlight.js. You
+                                    <strong>must</strong> import them and initialize the extension with all languages
+                                    you want to support:
+                                </p>
+                                <p>
+                                    this is a very <em>basic</em> example of tiptap.
+                                </p>
+                                <pre><code>body { display: none; }</code></pre>
+                                <pre><code v-html="CSSExample"></code></pre>
+                                <ul>
+                                    <li>
+                                        A regular list
+                                    </li>
+                                    <li>
+                                        With regular items
+                                    </li>
+                                </ul>
+                                <blockquote>
+                                    It's amazing 👏
+                                    <br/>
+                                    – mom
+                                </blockquote>
+                            </div>
+
+                        </editor>
                     </div>
                 </div>
-            </aside>
-            <div id="message-feed" class="column is-4 messages hero is-fullheight">
-                <div id="inbox-messages" class="inbox-messages">
-                    <div id="msg-card-0" data-preview-id="0" class="card">
-                        <div class="card-content">
-                            <div class="msg-header"><span class="msg-from"><small>From: Bulah Bauch</small></span> <span
-                                    class="msg-timestamp"></span> <span class="msg-attachment"><i
-                                    class="fa fa-paperclip"></i></span></div>
-                            <div class="msg-subject"><span class="msg-subject"><strong id="fake-subject-1">Sapiente dolore ut beatae tempora necess</strong></span>
+            </section>
+            <nav class="navbar is-fixed-bottom" role="navigation" aria-label="main navigation">
+                <div class="navbar-brand">
+                </div>
+                <div class="navbar-menu">
+                    <div class="navbar-end">
+                        <div class="navbar-item">
+                            <div class="buttons">
+                                <button class="button is-primary">
+                                    <span class="icon is-small">
+                                      <i class="fas fa-save"></i>
+                                    </span>
+                                    <strong>Save Changes</strong>
+                                </button>
                             </div>
-                            <div class="msg-snippet"><p id="fake-snippet-1">Distinctio et sed aut at ab illo recusandae
-                                doloremque.
-                                Eveniet nesciunt quibusdam cum velit ea ad.</p></div>
-                        </div>
-                    </div>
-                    <div id="msg-card-1" data-preview-id="1" class="card">
-                        <div class="card-content">
-                            <div class="msg-header"><span class="msg-from"><small>From: Kaci Heller</small></span> <span
-                                    class="msg-timestamp"></span> <span class="msg-attachment"><i
-                                    class="fa fa-paperclip"></i></span></div>
-                            <div class="msg-subject"><span class="msg-subject"><strong id="fake-subject-1">Enim incidunt ea ut magnam officiis quo </strong></span>
-                            </div>
-                            <div class="msg-snippet"><p id="fake-snippet-1">Officia non voluptas sed aut nobis.</p>
-                            </div>
-                        </div>
-                    </div>
-                    <div id="msg-card-2" data-preview-id="2" class="card">
-                        <div class="card-content">
-                            <div class="msg-header"><span class="msg-from"><small>From: Armand Mertz</small></span>
-                                <span class="msg-timestamp"></span> <span class="msg-attachment"><i
-                                        class="fa fa-paperclip"></i></span></div>
-                            <div class="msg-subject"><span class="msg-subject"><strong id="fake-subject-1">Voluptas nostrum excepturi quasi alias.</strong></span>
-                            </div>
-                            <div class="msg-snippet"><p id="fake-snippet-1">Animi repudiandae enim tempore aperiam vero.
-                                Ut inventore explicabo sit quibusdam.
-                                Alias et animi praesentium modi et est.
-                                Quae dolore et.</p></div>
-                        </div>
-                    </div>
-                    <div id="msg-card-3" data-preview-id="3" class="card">
-                        <div class="card-content">
-                            <div class="msg-header"><span class="msg-from"><small>From: Colin Cummings</small></span>
-                                <span class="msg-timestamp"></span> <span class="msg-attachment"><i
-                                        class="fa fa-paperclip"></i></span></div>
-                            <div class="msg-subject"><span class="msg-subject"><strong id="fake-subject-1">Officia pariatur et.</strong></span>
-                            </div>
-                            <div class="msg-snippet"><p id="fake-snippet-1">Corporis nemo numquam incidunt autem est.
-                                Est ullam error aut dolorem.
-                                Rerum omnis tenetur quia ut.</p></div>
-                        </div>
-                    </div>
-                    <div id="msg-card-4" data-preview-id="4" class="card">
-                        <div class="card-content">
-                            <div class="msg-header"><span class="msg-from"><small>From: Bradford Dach</small></span>
-                                <span class="msg-timestamp"></span> <span class="msg-attachment"><i
-                                        class="fa fa-paperclip"></i></span></div>
-                            <div class="msg-subject"><span class="msg-subject"><strong id="fake-subject-1">Nisi id et ducimus enim esse nulla debit</strong></span>
-                            </div>
-                            <div class="msg-snippet"><p id="fake-snippet-1">Suscipit dolores est sed enim occaecati
-                                similique fuga et minus.
-                                Fugiat veritatis distinctio cum quibusdam dolor aut totam.
-                                Qui enim optio necessitatibus eaque similique nihil.</p></div>
-                        </div>
-                    </div>
-                    <div id="msg-card-5" data-preview-id="5" class="card">
-                        <div class="card-content">
-                            <div class="msg-header"><span class="msg-from"><small>From: Ramona Lehner</small></span>
-                                <span class="msg-timestamp"></span> <span class="msg-attachment"><i
-                                        class="fa fa-paperclip"></i></span></div>
-                            <div class="msg-subject"><span class="msg-subject"><strong id="fake-subject-1">Distinctio possimus enim dolore est dolo</strong></span>
-                            </div>
-                            <div class="msg-snippet"><p id="fake-snippet-1">Fuga magni veritatis ut cum animi quasi
-                                voluptas quas.
-                                Aut et necessitatibus consequatur dolorem earum.
-                                Blanditiis ipsum quo ratione voluptatem aut dolorem.
-                                Placeat nulla non doloremque a culpa ullam ipsa ab.</p></div>
-                        </div>
-                    </div>
-                    <div id="msg-card-6" data-preview-id="6" class="card">
-                        <div class="card-content">
-                            <div class="msg-header"><span class="msg-from"><small>From: Alvera Morissette</small></span>
-                                <span class="msg-timestamp"></span> <span class="msg-attachment"><i
-                                        class="fa fa-paperclip"></i></span></div>
-                            <div class="msg-subject"><span class="msg-subject"><strong id="fake-subject-1">Quidem fuga mollitia totam reprehenderit</strong></span>
-                            </div>
-                            <div class="msg-snippet"><p id="fake-snippet-1">Qui animi odio voluptatum dolorum et et
-                                totam optio et.
-                                Deserunt et voluptates accusamus sed aut officia rerum est.
-                                Nihil ea magnam iure autem.</p></div>
-                        </div>
-                    </div>
-                    <div id="msg-card-7" data-preview-id="7" class="card">
-                        <div class="card-content">
-                            <div class="msg-header"><span class="msg-from"><small>From: Dr. Korey Koch</small></span>
-                                <span class="msg-timestamp"></span> <span class="msg-attachment"><i
-                                        class="fa fa-paperclip"></i></span></div>
-                            <div class="msg-subject"><span class="msg-subject"><strong id="fake-subject-1">Doloribus possimus reiciendis velit quas</strong></span>
-                            </div>
-                            <div class="msg-snippet"><p id="fake-snippet-1">Aperiam enim maxime asperiores tempora
-                                cumque dolore.</p></div>
-                        </div>
-                    </div>
-                    <div id="msg-card-8" data-preview-id="8" class="card">
-                        <div class="card-content">
-                            <div class="msg-header"><span class="msg-from"><small>From: Deondre Goyette</small></span>
-                                <span class="msg-timestamp"></span> <span class="msg-attachment"><i
-                                        class="fa fa-paperclip"></i></span></div>
-                            <div class="msg-subject"><span class="msg-subject"><strong id="fake-subject-1">Asperiores sed totam beatae quo dolorem </strong></span>
-                            </div>
-                            <div class="msg-snippet"><p id="fake-snippet-1">Culpa modi fugiat pariatur dolor corrupti
-                                cum veritatis totam velit.
-                                Voluptates aut laudantium sint quae et fuga eum.</p></div>
-                        </div>
-                    </div>
-                    <div id="msg-card-9" data-preview-id="9" class="card">
-                        <div class="card-content">
-                            <div class="msg-header"><span class="msg-from"><small>From: Velda Hettinger</small></span>
-                                <span class="msg-timestamp"></span> <span class="msg-attachment"><i
-                                        class="fa fa-paperclip"></i></span></div>
-                            <div class="msg-subject"><span class="msg-subject"><strong id="fake-subject-1">Dignissimos a atque.</strong></span>
-                            </div>
-                            <div class="msg-snippet"><p id="fake-snippet-1">Aliquid non sint quo.
-                                Exercitationem voluptas sint sequi.
-                                Accusamus modi fugit omnis molestiae odit magni minima vel.
-                                Quia cum sit quas molestias sed.
-                                Voluptatem consequatur accusamus error ex.</p></div>
-                        </div>
-                    </div>
-                    <div id="msg-card-10" data-preview-id="10" class="card">
-                        <div class="card-content">
-                            <div class="msg-header"><span class="msg-from"><small>From: Brendon Weber</small></span>
-                                <span class="msg-timestamp"></span> <span class="msg-attachment"><i
-                                        class="fa fa-paperclip"></i></span></div>
-                            <div class="msg-subject"><span class="msg-subject"><strong id="fake-subject-1">Itaque dolore iure.</strong></span>
-                            </div>
-                            <div class="msg-snippet"><p id="fake-snippet-1">Delectus rem omnis sint et eaque.
-                                Non recusandae vitae voluptate quia laudantium.</p></div>
                         </div>
                     </div>
                 </div>
-            </div>
-            <div id="message-pane" class="column is-6 message hero is-fullheight is-hidden">
-                <div class="action-buttons">
-                    <div class="control is-grouped"><a class="button is-small"><i class="fa fa-inbox"></i></a> <a
-                            class="button is-small"><i class="fa fa-exclamation-circle"></i></a> <a
-                            class="button is-small"><i class="fa fa-trash-o"></i></a></div>
-                    <div class="control is-grouped"><a class="button is-small"><i class="fa fa-exclamation-circle"></i></a>
-                        <a class="button is-small"><i class="fa fa-trash-o"></i></a></div>
-                    <div class="control is-grouped"><a class="button is-small"><i class="fa fa-folder"></i></a> <a
-                            class="button is-small"><i class="fa fa-tag"></i></a></div>
-                </div>
-                <div class="box message-preview">
-                    <div class="top">
-                        <div class="avatar"><img src="https://placehold.it/128x128"></div>
-                        <div class="address">
-                            <div class="name">John Smith</div>
-                            <div class="email">someone@gmail.com</div>
-                        </div>
-                        <hr>
-                        <div class="content"></div>
-                    </div>
-                </div>
-            </div>
+            </nav>
         </div>
     </div>
 </template>
 
 <script>
+    import heading1 from 'vue-material-design-icons/FormatHeader1'
+    import heading2 from 'vue-material-design-icons/FormatHeader2'
+    import heading3 from 'vue-material-design-icons/FormatHeader3'
+    import listBullets from 'vue-material-design-icons/FormatListBulleted'
+    import listNumbers from 'vue-material-design-icons/FormatListNumbers'
+    import checkList from 'vue-material-design-icons/FormatListChecks'
+    import Icon from './../components/Icon.vue'
+    import {Editor} from 'tiptap'
+    import {
+        CodeBlockHighlightNode,
+        BlockquoteNode,
+        CodeBlockNode,
+        HardBreakNode,
+        HeadingNode,
+        OrderedListNode,
+        BulletListNode,
+        ListItemNode,
+        TodoItemNode,
+        TodoListNode,
+        BoldMark,
+        CodeMark,
+        ItalicMark,
+        LinkMark,
+        StrikeMark,
+        UnderlineMark,
+        HistoryExtension,
+        ImageNode,
+        PlaceholderExtension,
+    } from 'tiptap-extensions'
+    import ParagraphAlignmentNode from './../modules/editor/Paragraph.js'
+    import FormatQuoteOpenIcon from "vue-material-design-icons/FormatQuoteOpen";
+    import FormatListCheckboxIcon from "vue-material-design-icons/FormatListCheckbox";
+    import {
+        CSSExample
+    } from './../test'
+    import YoutubeIcon from "vue-material-design-icons/Youtube";
     export default {
         name: "Composer",
+        components: {
+            YoutubeIcon,
+            FormatListCheckboxIcon,
+            FormatQuoteOpenIcon,
+            Editor,
+            heading1, heading2, heading3, listBullets, listNumbers, checkList,
+            "icon": Icon
+        },
+        data() {
+            return {
+                CSSExample,
+                extensions: [
+                    new BlockquoteNode(),
+                    new BulletListNode(),
+                    new CodeBlockNode(),
+                    new HardBreakNode(),
+                    new HeadingNode({maxLevel: 3}),
+                    new ListItemNode(),
+                    new OrderedListNode(),
+                    new TodoItemNode(),
+                    new TodoListNode(),
+                    new BoldMark(),
+                    new CodeMark(),
+                    new ItalicMark(),
+                    new LinkMark(),
+                    new StrikeMark(),
+                    new UnderlineMark(),
+                    new HistoryExtension(),
+                    new ImageNode(),
+                    new ParagraphAlignmentNode(),
+                    new PlaceholderExtension({
+                        emptyNodeClass: 'is-empty',
+                    }),
+                    new CodeBlockHighlightNode({
+                        languages: {
+                            js: require("highlight.js/lib/languages/javascript"),
+                            css: require('highlight.js/lib/languages/css'),
+                            go: require('highlight.js/lib/languages/go'),
+                            cpp: require('highlight.js/lib/languages/cpp'),
+                            python: require('highlight.js/lib/languages/python'),
+                            arduino: require('highlight.js/lib/languages/arduino'),
+                            erlang: require('highlight.js/lib/languages/erlang'),
+                            php: require('highlight.js/lib/languages/php'),
+                            dart: require('highlight.js/lib/languages/dart'),
+                            haskell: require('highlight.js/lib/languages/haskell'),
+                        },
+                    }),
+                ],
+            }
+        },
+        methods: {
+            setLinkUrl(url, type) {
+                type.command({href: url});
+            },
+            adjustEditorMenu() {
+                let navHeight = $('nav.navbar').height();
+                let header = $(".menubar:first");
+                let editorWidth = $('.editor.vue-editor').width();
+                console.log(window.pageYOffset, navHeight);
+                if (window.pageYOffset >= navHeight) {
+                    $(header).addClass("sticky").css({width: editorWidth, top: navHeight});
+                } else {
+                    $(header).removeClass("sticky");
+                }
+            },
+            addImage(nodes, marks) {
+                $('.editor__image-btn')
+                    .on('change', (evt) => {
+                        let file = evt.target.files;
+                        if (file && file[0]) {
+                            file = file[0];
+                            let reader = new FileReader();
+                            reader.onload = () => {
+                                nodes.image.command({src: reader.result});
+                            };
+                            reader.readAsDataURL(file);
+                        }
 
+                    })
+                    .click();
+            },
+            addLink(type, focus) {
+                this.$prompt('', 'Add Link', {
+                    confirmButtonText: 'OK',
+                    cancelButtonText: 'Cancel',
+                    inputPattern: /^(?:http(s)?:\/\/)?[\w.-]+(?:\.[\w\.-]+)+[\w\-\._~:/?#[\]@!\$&'\(\)\*\+,;=.]+$/,
+                    inputErrorMessage: 'Invalid Link',
+                    inputPlaceholder: 'https://...'
+                }).then(({value}) => {
+                    this.setLinkUrl(value, type, focus)
+                }).catch(() => {
+                });
+            },
+            mounted() {
+                console.log("Hello,World!");
+                let vm = this;
+                window.onscroll = function () {
+                    vm.adjustEditorMenu();
+                };
+
+            }
+        }
     }
 </script>
 
-<style scoped>
+<style>
     #composer {
-        padding-top: 50px;
+        padding-top: 100px !important;
+        padding-bottom: 60px;
     }
-    .aside {
-        display:block;
-        background-color: #F9F9F9;
-        border-right: 1px solid #DEDEDE;
+
+    .navbar {
+        box-shadow: 0 4px 12px 0 rgba(0, 0, 0, .06);
+        padding-left: 120px;
+        padding-right: 200px;
+        /*padding-top: 52px;*/
     }
-    .messages {
-        display:block;
-        background-color: #fff;
-        border-right: 1px solid #DEDEDE;
+
+    .columns:last-child {
+        margin-bottom: 0 !important;
     }
-    .message {
-        display:block;
-        background-color: #fff;
+
+    .menubar__button.link {
     }
-    .aside .compose {
-        height: 95px;
-        margin:0 -10px;
-        padding: 25px 30px;
+
+    .sticky {
+        position: fixed;
+        width: 100%;
+        top: 80px;
     }
-    .aside .compose .button {
-        color: #F6F7F7;
-    }
-    .aside .compose .button .compose {
-        font-size: 14px;
-        font-weight: 700;
-    }
-    .aside .main {
-        padding: 40px;
-        color: #6F7B7E;
-    }
-    .aside .title {
-        color: #6F7B7E;
-        font-size: 12px;
-        font-weight: bold;
-        text-transform: uppercase;
-    }
-    .aside .main .item {
-        display: block;
-        padding: 10px 0;
-        color: #6F7B7E;
-    }
-    .aside .main .item.active {
-        background-color: #F1F1F1;
-        margin: 0 -50px;
-        padding-left: 50px;
-    }
-    .aside .main .item:active,.aside .main .item:hover {
-        background-color: #F2F2F2;
-        margin: 0 -50px;
-        padding-left: 50px;
-    }
-    .aside .main .icon {
-        font-size: 19px;
-        padding-right: 30px;
-        color: #A0A0A0;
-    }
-    .aside .main .name {
-        font-size: 15px;
-        color: #5D5D5D;
-        font-weight: 500;
-    }
-    .messages {
-        padding: 40px 20px;
-    }
-    .message {
-        padding: 40px 20px;
-    }
-    .messages .action-buttons {
-        padding: 0;
-        margin-top: -20px;
-    }
-    .message .action-buttons {
-        padding: 0;
-        margin-top: -5px;
-    }
-    .action-buttons .control.is-grouped {
-        display: inline-block;
-        margin-right: 30px;
-    }
-    .action-buttons .control.is-grouped:last-child {
-        margin-right: 0;
-    }
-    .action-buttons .control.is-grouped .button:first-child {
-        border-radius: 5px 0 0 5px;
-    }
-    .action-buttons .control.is-grouped .button:last-child {
-        border-radius: 0 5px 5px 0;
-    }
-    .action-buttons .control.is-grouped .button {
-        margin-right: -5px;
-        border-radius: 0;
-    }
-    .pg {
-        display: inline-block;
-        top:10px;
-    }
-    .action-buttons .pg .title {
-        display: block;
-        margin-top: 0;
-        padding-top: 0;
-        margin-bottom: 3px;
-        font-size:12px;
-        color: #AAAAA;
-    }
-    .action-buttons .pg a{
-        font-size:12px;
-        color: #AAAAAA;
-        text-decoration: none;
-    }
-    .is-grouped .button {
-        background-image: linear-gradient(#F8F8F8, #F1F1F1);
-    }
-    .is-grouped .button .fa {
-        font-size: 15px;
-        color: #AAAAAA;
-    }
-    .inbox-messages {
-        margin-top:60px;
-    }
-    .message-preview {
-        margin-top: 60px;
-    }
-    .inbox-messages .card {
+
+    .sticky.menubar > div:first-child {
+        background-color: #bcff80;
         width: 100%;
     }
-    .inbox-messages strong {
-        color: #5D5D5D;
+
+    .sticky + .editor__content {
+        padding-top: 102px;
     }
-    .inbox-messages .msg-check {
-        padding: 0 20px;
+
+    .ProseMirror:focus {
     }
-    .inbox-messages .msg-subject {
-        padding: 10px 0;
-        color: #5D5D5D;
+    .ProseMirror {
+        outline: none;
+        border: 2px solid #FFF9C4;;
+        -webkit-border-radius: 5px;
+        -moz-border-radius: 5px;
+        border-radius: 5px;
+        padding: 12px;
+        margin-top: 22px;
+        min-height: 300px!important;
     }
-    .inbox-messages .msg-attachment {
-        float:right;
+
+    .ProseMirror-focused, .editor__content:focus {
+        -webkit-box-shadow: none!important;
+        -moz-box-shadow: none!important;
+        box-shadow: none!important;
     }
-    .inbox-messages .msg-snippet {
-        padding: 5px 20px 0px 5px;
+
+    .is-empty {
+        content: 'Hello, World';
     }
-    .inbox-messages .msg-subject .fa {
-        font-size: 14px;
-        padding:3px 0;
+
+    pre {
+        background: #000 !important;
+        border-radius: 5px !important;
+        color: #fff !important;
+        font-size: .8rem;
+        overflow-x: auto;
+        padding: .7rem 1rem;
     }
-    .inbox-messages .msg-timestamp {
-        float: right;
-        padding: 0 20px;
-        color: #5D5D5D;
+
+    .editor {
+        color: #000;
+        font-family: -apple-system, BlinkMacSystemFont, San Francisco, Roboto, Segoe UI, Helvetica Neue, sans-serif;
+        font-size: 18px;
+        line-height: 1.5;
     }
-    .message-preview .avatar {
-        display: inline-block;
+
+    .editor__content {
+        white-space: pre-wrap;
     }
-    .message-preview .top .address {
-        display: inline-block;
-        padding: 0 20px;
+
+    .editor__content:focus, .editor__content:active {
+        outline: none !important;
     }
-    .avatar img {
-        width: 40px;
-        border-radius: 50px;
-        border: 2px solid #999;
-        padding: 2px;
+
+    .material-design-icon {
+        font-size: 15px;
+        width: 18px;
     }
-    .address .name {
-        font-size: 16px;
-        font-weight: bold;
+
+    .menubar__button.is-active {
+        background-color: rgba(0, 0, 0, .1);
     }
-    .address .email {
-        font-weight: bold;
-        color: #B6C7D1;
+
+    .menubar__button:hover {
+        background-color: rgba(0, 0, 0, .05);
     }
-    .card.active {
-        background-color:#F5F5F5;
+
+    .menubar__button {
+        background: rgba(0, 0, 0, 0);
+        border: 0;
+        border-radius: 3px;
+        color: #000;
+        cursor: pointer;
+        display: -webkit-inline-box;
+        display: -ms-inline-flexbox;
+        display: inline-flex;
+        font-weight: 700;
+        margin-right: .2rem;
+        padding: .2rem .5rem;
+    }
+
+    .menubar {
+        -webkit-transition: visibility .2s .4s, opacity .2s .4s;
+        display: -webkit-box;
+        display: -ms-flexbox;
+        display: flex;
+        margin-bottom: 1rem;
+        transition: visibility .2s .4s, opacity .2s .4s;
+        box-sizing: border-box;
+        margin: 0;
+        padding: 0;
+        text-rendering: optimizeLegibility;
+        text-size-adjust: 100%;
     }
 </style>
