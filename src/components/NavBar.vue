@@ -43,7 +43,7 @@
                     </div>
                 </div>
                 <div class="navbar-item">
-                    <router-link to="/compose" class="button is-warning">
+                    <router-link :to="{name: 'compose'}" class="button is-warning">
                         <span class="icon">
                           <i class="fas fa-pen"></i>
                         </span>
@@ -51,8 +51,16 @@
                     </router-link>
                 </div>
             </div>
-
-            <div class="navbar-end">
+            <div class="navbar-end" v-if="auth">
+                <avatar/>
+                <auth-nav></auth-nav>
+            </div>
+            <div class="navbar-end" v-else>
+                <div class="navbar-item">
+                    <b-field>
+                            <b-input v-model="search" icon="search" icon-pack="fas" size="is-small" placeholder="Search" rounded ></b-input>
+                    </b-field>
+                </div>
                 <div class="navbar-item">
                     <div class="buttons">
                         <router-link to="/register" class="button is-primary">
@@ -68,11 +76,33 @@
     </nav>
 </template>
 <script>
+    import BIcon from "buefy/src/components/icon/Icon";
+    import AuthNav from "./auth/navbar/AuthNav";
+    import Avatar from "./auth/navbar/Avatar";
+
     export default {
         name: 'nav-bar',
-        mounted () {
-            $(document).ready(function() {
-                $(".navbar-burger").click(function() {
+        components: {BIcon, 'auth-nav': AuthNav, Avatar},
+        data() {
+            return {
+                search: '',
+                navigation: 'home'
+            }
+        },
+        computed: {
+            auth () {
+                return !!this.$store.state.user.auth
+            }
+        },
+        watch: {
+            'search'(term, prev) {
+                console.log(`Searching for ${term}`)
+            }
+        },
+        mounted() {
+            // console.log('nav ', this.$auth.getToken())
+            $(document).ready(function () {
+                $(".navbar-burger").click(function () {
                     $(".navbar-burger").toggleClass("is-active");
                     $(".navbar-menu").toggleClass("is-active");
                 });

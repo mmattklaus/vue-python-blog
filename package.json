@@ -8,16 +8,20 @@
   },
   "dependencies": {
     "buefy": "^0.7.0",
+    "crypto-js": "^3.1.9-1",
     "element-ui": "^2.4.9",
     "highlight.js": "^9.13.1",
     "jquery": "^3.3.1",
+    "moment": "^2.22.2",
     "nedb": "^1.8.0",
+    "password-hash": "^1.2.2",
     "tiptap": "^0.20.1",
     "tiptap-extensions": "^0.22.2",
     "vue": "^2.5.17",
     "vue-highlight.js": "^2.2.0",
     "vue-material-design-icons": "^2.4.0",
-    "vue-router": "^3.0.1"
+    "vue-router": "^3.0.1",
+    "vuex": "^3.0.1"
   },
   "devDependencies": {
     "@vue/cli-plugin-babel": "^3.0.5",

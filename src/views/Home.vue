@@ -60,6 +60,9 @@
         name: 'home',
         components: {
             HelloWorld
+        },
+        mounted () {
+            // console.log(this.$auth.auth())
         }
     }
 </script>
