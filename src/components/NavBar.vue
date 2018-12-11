@@ -3,7 +3,7 @@
         <div class="navbar-brand">
             <router-link to="/" class="navbar-item" href="/">
                 <!--<img src="/images/mk-logo.jpg" width="112" height="28">-->
-                <span class="title">Mushi</span>
+                <span class="title">Edna Mesue</span>
             </router-link>
 
             <a role="button" class="navbar-burger burger" aria-label="menu" aria-expanded="false"
@@ -45,23 +45,19 @@
                 <div class="navbar-item">
                     <router-link :to="{name: 'compose'}" class="button is-warning">
                         <span class="icon">
-                          <i class="fas fa-pen"></i>
+                          <i class="fas fa-inbox"></i>
                         </span>
-                        <span>Compose</span>
+                        <span>Inbox</span>
                     </router-link>
                 </div>
             </div>
-            <div class="navbar-end" v-if="auth">
-                <avatar/>
-                <auth-nav></auth-nav>
-            </div>
-            <div class="navbar-end" v-else>
+            <div class="navbar-end">
                 <div class="navbar-item">
                     <b-field>
                             <b-input v-model="search" icon="search" icon-pack="fas" size="is-small" placeholder="Search" rounded ></b-input>
                     </b-field>
                 </div>
-                <div class="navbar-item">
+                <div class="navbar-item" v-if="!auth">
                     <div class="buttons">
                         <router-link to="/register" class="button is-primary">
                             <strong>Sign up</strong>
@@ -71,6 +67,10 @@
                         </router-link>
                     </div>
                 </div>
+            </div>
+            <div class="navbar-end" v-if="auth">
+                <avatar/>
+                <auth-nav></auth-nav>
             </div>
         </div>
     </nav>

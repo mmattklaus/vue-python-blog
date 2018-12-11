@@ -13,7 +13,15 @@ import "vue-material-design-icons/styles.css"
 import 'highlight.js/styles/default.css';
 import 'element-ui/lib/theme-chalk/index.css';
 import 'buefy/dist/buefy.css'
+import CKEditor from '@ckeditor/ckeditor5-vue'
+import MyCustomUploadAdapterPlugin from './modules/editor/MyUploaderAdapter'
 
+import 'animate.css';
+// @import('animate.css')
+
+Vue.use(CKEditor, {
+    extraPlugins: [MyCustomUploadAdapterPlugin]
+});
 Vue.use(Auth);
 Vue.use(VueHighlightJS);
 Vue.use(ElementUI);
@@ -31,7 +39,6 @@ window.jquery = $;
 Vue.mixin({
     data() {
         return {
-            intended: ''
         }
     },
     methods: {
@@ -45,6 +52,7 @@ Vue.mixin({
 
 router.beforeEach(
     (to, from, next) => {
+        $('head').find('title').html('Intuitive Blogger | ' + to.meta.title);
         let auth = !localStorage.getItem('authUser')? 0:localStorage.getItem('authUser').length;
         // console.log(router.options.routes.find(route => route.name === 'login'))
         //if (Vue.options.data.intended !== '') {

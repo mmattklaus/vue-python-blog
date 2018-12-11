@@ -4,7 +4,8 @@ import Home from './views/Home.vue'
 import Blog from './views/Blog.vue'
 import Login from './views/auth/Login.vue'
 import Register from './views/auth/Register.vue'
-import Composer from './views/Composer.vue'
+import Composer from './components/inbox/Compose.vue'
+import Inbox from './views/inbox/Inbox.vue'
 
 Vue.use(Router);
 
@@ -30,13 +31,43 @@ export default new Router({
             }
         },
         {
-            path: '/compose',
-            name: 'compose',
-            component: Composer,
-            meta: {
-                forAuth: true,
-                title: 'Compose'
-            }
+            path: '/inbox',
+            component: Inbox,
+            children: [
+                {
+                    path: '',
+                    component: Composer,
+                    name: 'compose',
+                    meta: {
+                        forAuth: true,
+                        title: 'Compose'
+                    }
+                }, {
+                    path: 'draft',
+                    component: require('./components/inbox/Draft').default,
+                    name: 'draft',
+                    meta: {
+                        forAuth: true,
+                        title: 'Draft'
+                    }
+                }, {
+                    path: 'published',
+                    component: require('./components/inbox/Published').default,
+                    name: 'published',
+                    meta: {
+                        forAuth: true,
+                        title: 'Published'
+                    }
+                }, {
+                    path: 'stats',
+                    component: require('./components/inbox/Statistics').default,
+                    name: 'stats',
+                    meta: {
+                        forAuth: true,
+                        title: 'Statistics'
+                    }
+                }
+            ]
         },
         {
             path: '/login',
@@ -75,6 +106,14 @@ export default new Router({
             meta: {
                 forVisitors: false,
                 title: 'About'
+            }
+        },
+        {
+            path: '*',
+            name: '404',
+            component: () => import('./views/404/NotFound.vue'),
+            meta: {
+                title: 'Page Not Found'
             }
         }
     ]
