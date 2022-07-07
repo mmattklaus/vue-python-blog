@@ -16,7 +16,7 @@
     "element-ui": "^2.4.9",
     "highlight.js": "^9.13.1",
     "jquery": "^3.3.1",
-    "moment": "^2.22.2",
+    "moment": "^2.29.4",
     "nedb": "^1.8.0",
     "password-hash": "^1.2.2",
     "tiptap": "^0.20.1",
